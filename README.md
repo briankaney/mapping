@@ -1,2 +1,2 @@
 # mapping
-Large variety of tools for mapping
+Large variety of tools for mapping.
