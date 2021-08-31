@@ -1,0 +1,19 @@
+//--------i-----------------------------------------------------------------
+//                  Raster Mask Format and Utilities
+//--------------------------------------------------------------------------
+
+The raster mask is a binary file that contains a small fixed length header and then an 
+array of integer flags.  The flag array marks different geographical regions in a 2d map.
+
+
+There is no reason (here, anyway) to ever uncompress a raster mask.  It can be handy to see
+the uncompressed files size, as this is a test of file integrity.  A '$> gzip -l test.gz' 
+or '$> gunzip -l test.gz' will report this value without needed to actually do the 
+de-compression.  The '-l' option does not look at the actual data, but reads the gzip file 
+header so a non-standard version of zip util could effect this.  Once the uncompressed 
+file size is known it should match: 28 + 2 x (dim_x x dim_y).  For instance, a 100x100 
+raster mask will always be 20,028 bytes uncompressed.
+
+
+
+
