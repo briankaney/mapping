@@ -1,4 +1,4 @@
-//--------i-----------------------------------------------------------------
+//--------------------------------------------------------------------------
 //                  Raster Mask Format and Utilities
 //--------------------------------------------------------------------------
 
@@ -13,7 +13,6 @@ de-compression.  The '-l' option does not look at the actual data, but reads the
 header so a non-standard version of zip util could effect this.  Once the uncompressed 
 file size is known it should match: 28 + 2 x (dim_x x dim_y).  For instance, a 100x100 
 raster mask will always be 20,028 bytes uncompressed.
-
 
 
 

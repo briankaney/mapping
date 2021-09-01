@@ -1,8 +1,8 @@
 <?php
 
 //--------------------------------------------------------------------------------------
-//   Function to read the 28 byte header section of a raster mask file.  File point is 
-//   sent as the arg and an array of 7 integers is returned.
+//   Function to read the 28 byte header section of a raster mask file.  File pointer is 
+//   sent as the arg and an associative array of 7 integers is returned.
 //--------------------------------------------------------------------------------------
 
   function ReadMaskHeader($inf)
@@ -23,7 +23,35 @@
     return $header;
   }
 
+//--------------------------------------------------------------------------------------
+//   Function to read the body of a raster mask file.  File pointer is sent as the arg.
+//   1D integer array of mask flags is returned.  PHP unpack creates an associative array 
+//   but this is translated to an indexed array before being returned.
+//--------------------------------------------------------------------------------------
 
+  function ReadMaskBody($inf)
+  {
+    $header = ReadMaskHeader($inf);
+
+    $num_pts = $header['num_x']*$header['num_y'];
+    $binary_str = gzread($inf,$num_pts*2);
+    $format = "s".$num_pts;
+    $values = unpack($format,$binary_str);
+
+    $flags = Array();
+    for($i=1;$i<=$num_pts;++$i)
+    {
+      $str = strval($i);
+      $flags[$i-1] = $values[$str];
+    }
+
+    return $flags;
+  }
+
+//--------------------------------------------------------------------------------------
+//   Function to write out a raster map header.  Copies info from a given associative 
+//   array header that must already exist and be passed in.
+//--------------------------------------------------------------------------------------
 
   function CopyMaskHeader($outf,$header)
   {
@@ -32,7 +60,9 @@
     gzwrite($outf,$binary_str);
   }
 
-
+//--------------------------------------------------------------------------------------
+//   Function to write out a raster map header by specifying the field values directly.
+//--------------------------------------------------------------------------------------
 
   function WriteMaskHeader($outf,$num_x,$num_y,$wlon,$nlat,$del_lon,$del_lat,$scale)
   {
@@ -40,8 +70,46 @@
     gzwrite($outf,$binary_str);
   }
 
+//--------------------------------------------------------------------------------------
+//   Function to write out the flag body of a raster map from an indexed array of integers.
+//--------------------------------------------------------------------------------------
 
+  function WriteMaskBody($outf,$flag_array)
+  {
+    $num = count($flag_array);
+    for($i=0;$i<$num;++$i)
+    {
+      $binary_str = pack("s",$flag_array[$i]);
+      gzwrite($outf,$binary_str);
+    }
+  }
 
+//--------------------------------------------------------------------------------------
+//   The following functions are exact copies and borrowed from the library_pts.php file.
+//   That library for dealing with the 'pts' format contains much we don't need here, so 
+//   the decision was made not to force its inclusion in these utilities but instead to  
+//   copy the tiny bit we need.
+//--------------------------------------------------------------------------------------
 
+  function SkipNBlocks($fp,$n)
+  {
+    for($i=0;$i<$n;++$i)
+    {
+      $line = trim(fgets($fp));
+      $col = explode('|',$line);
+      for($j=0;$j<$col[1];++$j) { fgets($fp); }
+    }
+  }
+
+  function StoreBlock($fp)
+  {
+    $block = array();
+
+    $block[0] = trim(fgets($fp));
+    $col = explode('|',$block[0]);
+    for($i=0;$i<$col[1];++$i) { $block[$i+1] = trim(fgets($fp)); }
+
+    return $block;
+  }
 
 ?>
