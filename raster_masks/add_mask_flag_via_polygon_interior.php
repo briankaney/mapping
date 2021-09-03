@@ -46,7 +46,7 @@
   $output = $argv[5];
 
 //--------------------------------------------------------------------------------------
-//   Test for needed files.  Open mask file and read header.
+//   Test for needed files.  Open input and output mask files and copy header over.
 //--------------------------------------------------------------------------------------
 
   if(!file_exists($mask)) {  print "\nMask file not found: $mask\n\n";  exit(0);  }
@@ -55,7 +55,8 @@
   $inf = gzopen($mask,"rb");
   $header = ReadMaskHeader($inf);
 
-  $flags = ReadMaskBody($inf);
+  $outf = gzopen($output,"wb");
+  CopyMaskHeader($outf,$header);
 
 //--------------------------------------------------------------------------------------
 //   Open the polygon pts file and read in the bounding box from the header and all the 
@@ -67,7 +68,7 @@
 //-102.79625 39.03915
 //--------------------------------------------------------------------------------------
 
-  $pts_fpt = gzopen($pts,"r");
+  $pts_fpt = fopen($pts,"r");
 
   fgets($pts_fpt);
   SkipNBlocks($pts_fpt,$index);
@@ -89,21 +90,36 @@
     $lat[$i] = $fields[1];
   }
 
+  fclose($pts_fpt);
+
 //--------------------------------------------------------------------------------------
-//   Loop over all the mask points and apply the polygon point test to each one..
+//   Loop over all the mask points and apply the polygon point test to each one.  In this
+//   low memory version, the input is read, tested and output, before moving on to the 
+//   next point.  So very little of the mask file is in memory at one time.
 //--------------------------------------------------------------------------------------
 
   for($y=0;$y<$header['num_y'];++$y)  //--The loop over latitudes
   {
     $test_lat = ($header['nlat']-$y*$header['del_lat']);
+
          //--If lat is outside polygon bounding box, then don't test whole row
-    if($test_lat>$max_lat || $test_lat<$min_lat) { continue; }
+    if($test_lat>$max_lat || $test_lat<$min_lat)
+    {
+      $binary_str = gzread($inf,$header['num_x']*2);
+      gzwrite($outf,$binary_str);
+      continue;
+    }
 
     for($x=0;$x<$header['num_x'];++$x)  {  //--The loop over longitudes
       $test_lon = ($header['wlon']+$x*$header['del_lon']);
 
            //--If long is outside polygon bounding box, then don't test this point
-      if($test_lon<$min_lon || $test_lon>$max_lon) { continue; }
+      if($test_lon<$min_lon || $test_lon>$max_lon)
+      {
+        $binary_str = gzread($inf,2);
+        gzwrite($outf,$binary_str);
+        continue;
+      }
 
       $even_odd_test = 0;
       for($i=1;$i<$num_lines;++$i)
@@ -113,21 +129,28 @@
                //---Satisfying the first 'if' above prevents a zero denominator in the second 'if' that follows below.
           if( ($test_lon < ($lon[$i] + ($test_lat-$lat[$i])*($lon[$i-1]-$lon[$i])/($lat[$i-1]-$lat[$i]))) ) { ++$even_odd_test; }
         }  
-      }  
-      if($even_odd_test%2 == 1) { $flags[$y*$header['num_x']+$x] = $flag; }
       }
-    print "row $y complete\n";  //--The nested lat/long/polygon loop can be very slow so report progress
+
+      if($even_odd_test%2 == 0)
+      {
+        $binary_str = gzread($inf,2);
+        gzwrite($outf,$binary_str);
+      }
+      if($even_odd_test%2 == 1)
+      {
+        $dummy_str = gzread($inf,2);  //--Still need to advance inf pointer even though value is not used
+        $binary_str = pack("s1",$flag);
+        gzwrite($outf,$binary_str);
+      }
     }
+    print "row $y complete\n";  //--The nested lat/long/polygon loop can be very slow so report progress
+  }
 
 //--------------------------------------------------------------------------------------
-//    Open and write out the output raster mask
+//    Close both input and output mask files.
 //--------------------------------------------------------------------------------------
 
-  $outf = gzopen($output,"wb");
-
-  CopyMaskHeader($outf,$header);
-  WriteMaskBody($outf,$flags);
-
+  gzclose($inf);
   gzclose($outf);
 
 ?>

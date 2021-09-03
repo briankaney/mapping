@@ -38,15 +38,11 @@
   if(!file_exists($mask)) { print "Error: $mask file not found\n\n";  exit(0); }
 
 //--------------------------------------------------------------------------------------
-//   Read input file
+//   Open input file and read header
 //--------------------------------------------------------------------------------------
 
   $inf = gzopen($mask,"rb");
   $header = ReadMaskHeader($inf);
-
-  rewind($inf);
-  $flags = ReadMaskBody($inf);
-  gzclose($inf);
 
 //--------------------------------------------------------------------------------------
 //   Create an all black image the same dimensions as the raster map
@@ -58,6 +54,7 @@
   imagefilledrectangle($image,0,0,$header['num_x'],$header['num_y'],$black);
 
 //--------------------------------------------------------------------------------------
+//   Set up color array.  These 12 colors will be 'rotated' for the different mask flags
 //--------------------------------------------------------------------------------------
 
   $colors = Array();
@@ -82,18 +79,21 @@
   {
     for($x=0;$x<$header['num_x'];++$x)
     {
-      $value = $flags[$y*$header['num_x']+$x];
+      $binary_str = gzread($inf,2);
+      $value = unpack("s1",$binary_str);
+      $number = $value['1'];
 
-      if($value==0) { continue; }
-      $color = $colors[($value-1)%12];
+      if($number==0) { continue; }
+      $color = $colors[($number-1)%12];
       imagesetpixel($image,$x,$y,$color);
     }
   }
 
 //--------------------------------------------------------------------------------------
-//   Write out the final image and clean up memory
+//   Close input file, write out the final image and clean up memory
 //--------------------------------------------------------------------------------------
 
+  gzclose($inf);
   imagepng($image,$img);
   imagedestroy($image);
 
