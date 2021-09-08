@@ -20,6 +20,10 @@
     print "   merging regions by making their flags equal.  Squeezing out unused flag values.  Preparing a\n";
     print "   mask for a merger with another mask.\n\n";
 
+    print "   If old and new flag values are the same, then the output would be identical to the input.  This\n";
+    print "   could be useful to allow in a batch process and is optimized by just doing a linux 'cp' instead\n";
+    print "   of stepping all the way through the binary.\n\n";
+
     exit(0);
   }
 
@@ -33,6 +37,8 @@
   $old_flag = $argv[2];
   $new_flag = $argv[3];
   $output = $argv[4];
+
+  if($old_flag == $new_flag) { system("cp $mask $output");  exit(0); }
 
 //--------------------------------------------------------------------------------------
 //   Test for input mask file.  Open input and output mask files and copy header over.
