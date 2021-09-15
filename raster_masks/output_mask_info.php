@@ -12,7 +12,7 @@
     print "\n\nUsage:\n";
     print "   output_mask_info.php input_file\n\n";
     print "Examples:\n";
-    print "   ./output_mask_info.php sample_data/ok-adair-cherokee.750x500.mask.gz\n\n";
+    print "   ./output_mask_info.php sample_data/ok-adair-cherokee.751x501.mask.gz\n\n";
 
     print "   Given a mask file this utility outputs some information about the file.  This starts\n";
     print "   with an output of the dimensions, resolution and lat/long bounds of the mask.  The\n";

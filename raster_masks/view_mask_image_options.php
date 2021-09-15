@@ -12,8 +12,8 @@
     print "\n\nUsage:\n";
     print "   view_mask_image_options.php [options] input_mask_file output_image_file\n\n";
     print "Examples:\n";
-    print "   ./view_mask_image_options.php sample_data/ok-adair-cherokee.750x500.mask.gz ok-adair-cherokee.png\n";
-    print "   ./view_mask_image_options.php -h=1-1 sample_data/ok-adair-cherokee.750x500.mask.gz ok-adair-cherokee.png\n\n";
+    print "   ./view_mask_image_options.php sample_data/ok-adair-cherokee.751x501.mask.gz ok-adair-cherokee.png\n";
+    print "   ./view_mask_image_options.php -h=1-1 sample_data/ok-adair-cherokee.751x501.mask.gz ok-adair-cherokee.png\n\n";
 
     print "   A way to get a simple, quick view of a raster map.  User specifies an input raster\n";
     print "   map file and a name for the output image.  The output will be a png with the same\n";

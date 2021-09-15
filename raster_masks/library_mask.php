@@ -112,4 +112,28 @@
     return $block;
   }
 
+  function angleSubtendedBetweenTwoSphCoordPts($lon1,$lat1,$lon2,$lat2)
+  {
+    $lon1 = deg2rad($lon1);
+    $lat1 = deg2rad($lat1);
+    $lon2 = deg2rad($lon2);
+    $lat2 = deg2rad($lat2);
+
+    return acos(sin($lat1)*sin($lat2) + cos($lat1)*cos($lat2)*cos($lon2-$lon1));
+  }
+
+  function distanceBetweenTwoLatLonPts($lon1,$lat1,$lon2,$lat2,$units)
+  {
+    $EarthRadiusKm = 6371;
+
+    $angle_subtended = angleSubtendedBetweenTwoSphCoordPts($lon1,$lat1,$lon2,$lat2);
+
+    if($units=="km")  return $EarthRadiusKm*$angle_subtended;
+    if($units=="m")   return $EarthRadiusKm*1000*$angle_subtended;
+    if($units=="mi")  return $EarthRadiusKm*0.621371*$angle_subtended;
+    if($units=="ft")  return $EarthRadiusKm*3280.84*$angle_subtended;
+
+    return -999;
+  }
+
 ?>

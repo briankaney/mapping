@@ -12,9 +12,9 @@
     print "\n\nUsage:\n";
     print "   blank_mask_create.php mask_file num_x num_y wlon nlat delta_lon delta_lat ll_scale\n\n";
     print "Examples:\n";
-    print "   ./blank_mask_create.php ok.150x100.blank.gz 150 100 -9550 3650 1 1 100\n";
-    print "   ./blank_mask_create.php conus.blank.gz 7000 3500 -129995 54995 1 1 100\n";
-    print "   ./blank_mask_create.php ok.750x500.blank.gz 750 500 -95500 36500 2 2 1000\n\n";
+    print "   ./blank_mask_create.php ok.150x100.blank.gz 150 100 -95495 36495 10 10 1000\n";
+    print "   ./blank_mask_create.php ok.751x501.blank.gz 751 501 -95500 36500 2 2 1000\n";
+    print "   ./blank_mask_create.php conus.blank.gz 7000 3500 -129995 54995 10 10 1000\n\n";
 
     print "   This program creates a new raster mask file.  The first argument is the output filename.\n";
     print "   The next seven arguments correspond directly to the seven header fields in the file to\n";

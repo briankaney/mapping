@@ -12,7 +12,7 @@
     print "\n\nUsage:\n";
     print "   output_mask_info.php input_file\n\n";
     print "Examples:\n";
-    print "   ./output_mask_info.php sample_data/ok-adair-cherokee.750x500.mask.gz\n\n";
+    print "   ./output_mask_info.php sample_data/ok-adair-cherokee.751x501.mask.gz\n\n";
 
     print "   Given a mask file this utility outputs some information about the file.  This starts\n";
     print "   with an output of the dimensions, resolution and lat/long bounds of the mask.  The\n";
@@ -66,17 +66,18 @@
     $format = "s".$header['num_x'];
     $values = unpack($format,$binary_str);
 
-    for($x=1;$x<=$header['num_x'];++$x)  //--The loop over longitudes
+    for($x=0;$x<$header['num_x'];++$x)  //--The loop over longitudes
     {
-      if($values[$x]<32767)
+      $xi = $x+1;
+      if($values[$xi]<32767)
       {
-        ++$bin_count[$values[$x]];
+        ++$bin_count[$values[$xi]];
         $test_lat = ($header['nlat']-$y*$header['del_lat']);
         $test_lon = ($header['wlon']+$x*$header['del_lon']);
-        if($test_lon<$wlon[$values[$x]]) { $wlon[$values[$x]]=$test_lon; }
-        if($test_lon>$elon[$values[$x]]) { $elon[$values[$x]]=$test_lon; }
-        if($test_lat>$nlat[$values[$x]]) { $nlat[$values[$x]]=$test_lat; }
-        if($test_lat<$slat[$values[$x]]) { $slat[$values[$x]]=$test_lat; }
+        if($test_lon<$wlon[$values[$xi]]) { $wlon[$values[$xi]]=$test_lon; }
+        if($test_lon>$elon[$values[$xi]]) { $elon[$values[$xi]]=$test_lon; }
+        if($test_lat>$nlat[$values[$xi]]) { $nlat[$values[$xi]]=$test_lat; }
+        if($test_lat<$slat[$values[$xi]]) { $slat[$values[$xi]]=$test_lat; }
       }
     }
   }

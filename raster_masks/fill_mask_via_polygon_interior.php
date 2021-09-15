@@ -12,7 +12,7 @@
     print "\n\nUsage:\n";
     print "   fill_mask_via_polygon_interior.php blank_mask mask_flag_value pts_file pts_index output_file\n\n";
     print "Examples:\n";
-    print "   ./fill_mask_via_polygon_interior.php sample_data/ok.750x500.blank.gz 1 sample_data/OK.Adair.Cherokee.pts 0 ok-adair.750x500.mask.gz\n";
+    print "   ./fill_mask_via_polygon_interior.php sample_data/ok.751x501.blank.gz 1 sample_data/OK.Adair.Cherokee.pts 0 ok-adair.751x501.mask.gz\n";
     print "   ./fill_mask_via_polygon_interior.php sample_data/ok.150x100.blank.gz 1 sample_data/OK.Adair.Cherokee.pts 1 ok-cherokee.150x100.mask.gz\n\n";
 
     print "   This utility creates a new raster mask that uses a pts file polygon to flag interior points\n";

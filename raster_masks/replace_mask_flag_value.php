@@ -12,7 +12,7 @@
     print "\n\nUsage:\n";
     print "   replace_mask_flag_value.php input_mask old_flag_value new_flag_value output_file\n\n";
     print "Examples:\n";
-    print "   ./replace_mask_flag_value.php sample_data/ok-adair-cherokee.750x500.mask.gz 2 1 ok-merged.750x500.mask.gz\n\n";
+    print "   ./replace_mask_flag_value.php sample_data/ok-adair-cherokee.751x501.mask.gz 2 1 ok-merged.751x501.mask.gz\n\n";
 
     print "   Takes an input mask file and replaces one of the flags (if present) with another value.  The\n";
     print "   four arguments are straight forward: original mask file name, old flag value to be replaced,\n";
