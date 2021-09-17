@@ -23,6 +23,8 @@
     exit(0);
   }
 
+  if($argc!=4) { print "\nFatal Error: Wrong number of command line arguments\n\n";  exit(0); }
+
   include 'library_pts.php';
 
 //--------------------------------------------------------------------------------------
