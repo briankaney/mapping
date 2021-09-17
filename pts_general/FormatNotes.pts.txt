@@ -1,0 +1,119 @@
+Format Notes for 'pts' format files.
+
+pts is a plain text format that mostly contains longitude/latitude geographic 
+point pairs.  A sample is below:
+
+//-----------------------------------------------
+23
+0|224|-93.86257|36.38755|-93.73516|36.15952|drive|firm||||
+-93.86233 36.15952
+-93.86193 36.17264
+-93.86176 36.17500
+...
+-93.91804 36.17476
+-93.91819 36.17442
+21|1|-93.63849|36.39542|-93.63849|36.39542|visit|firm||||
+-93.63849 36.39542
+22|5|-93.63836|36.39534|-93.63774|36.39444|walk|firm||||
+-93.63836 36.39534
+-93.63783 36.39506
+-93.63774 36.39477
+-93.63789 36.39451
+...
+-90.60137 34.49987
+-90.59940 34.49938
+-90.58743 34.49655
+//-----------------------------------------------
+
+There is a single header line for the whole file.  This must be an interger and 
+nothing else (no white space) and gives the number of blocks found in the rest of 
+the file.  The rest of the file consists of the blocks of points.  Each block 
+starts with a single header line.  The rest of the block is the longitude/latitude 
+pairs.  Each of these lines has two number fields separated by white space.  There 
+should be no leading whitespace in any line in the file.
+
+The header lines for each block consist of text fields delimited by a pipe ('|') 
+character.  The pipe character should be thought of as ending the field or column 
+just before it so the header line will always end with a '|'.
+
+The first six columns are required to contain certain information.  But there can be 
+up to 18 optional columns afterwards (for a total of 24).  The first column is an 
+integer index for that block.  This is 0 for the first block and then 1, 2, 3, and so 
+on up to one less than the total number of blocks in the file.  The 2nd column is the 
+number of long/lat points in that block.  This count does not include the header itself.
+So a block of 10 lines would have 1 header line and 9 geographic points and so a '9' 
+in the 2nd column of the header.  The 3rd, 4th, 5th, and 6th fields in the block 
+header line define the bounding box for the whole set of points in the block.  The 
+order is longitude and latitude of the northwest most corner and then the longitude 
+and latitude of the southeast most corner.
+
+The 0 to 18 optional columns in the block header line can contain most any character 
+with the exception of '|'.  That is, there is no way to have a '|' in any of the column 
+strings via something like quotes or an escape sequence.  It will always signal 
+another field starting.  Likewise, there is no way to escape or encode a 'return' 
+either.  They need to be plain text strings.
+
+Summary:
+
+1.)  No lines should have any leading whitespace.
+2.)  The overall file header line should be an integer with no trailing whitespace.
+3.)  The overall file header line number should match the number of blocks in the file.
+4.)  The block header must have at least six columns delimited by '|' with no whitespace.
+5.)  The whole block header line must end with a '|'.
+6.)  The block index must be integers in the correct order from 0 to (number_blocks - 1).
+7.)  The block point count must match the number of point lines in the block.
+8.)  The point lines should be two integers or floating point values separated by a single space.
+9.)  The block header line can contain up to 24 fields and there is a '|' after each field.
+10.) Block header fields 7 thru 24 (if any) can contain any string including whitespace 
+     and punctuation, except there is no way to include a '|' within those strings thru 
+     an escape sequence or quotes.
+
+The use of the optional block header fields 7 thru 24 can vary from one project to another.  
+All generic utilities should faithfully preserve the contents of these optional fields. 
+These should be distinguished from project specific code that might act on or require 
+these fields in some way.
+
+For a properly formatted 'pts' file the number of optional fields should be the same 
+for all blocks in the file.  However, most of the generic utilities work fine if the 
+number of optional fields is mixed so there is a high tolerance for that.
+
+//-----------------------------------------------
+
+General Notes for use with standard Mercator zoom levels.
+
+Zoom	Degrees of longitude per single pixel
+
+0       1.40625
+1       0.70313
+2       0.35156
+3       0.17578
+-----------------2 decimal place lat/lon needed next
+4       0.08789
+5       0.04395
+6       0.02197
+-----------------3 decimal place lat/lon needed next
+7       0.01099
+8       0.00549
+9       0.00275
+---------------  4 decimal place lat/lon needed next
+10      0.00137
+11      0.00069
+12      0.00034
+---------------  5 decimal place lat/lon needed next
+13      0.00017
+14      0.00009
+15      0.00004
+
+//-----------------------------------------------
+
+Approxiamate rule of thumb for latitudes and any longitudes between 60 and -60:
+
+Lat/lon 0.01    - 1 km
+Lat/lon 0.001   - 100 m
+Lat/lon 0.0001  - 10 m
+Lat/Lon 0.00001 - 1 m
+
+//-----------------------------------------------
+
+
+
