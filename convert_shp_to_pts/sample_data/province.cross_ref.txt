@@ -1,0 +1,13 @@
+0|Alberta|
+1|Saskatchewan|
+2-3|Manitoba|
+4-79|Newfoundland & Labrador|
+80|Prince Edward Island|
+81-83|Nova Scotia|
+84-138|Northwest Territories|
+139-550|Nunavut|
+551-571|Ontario|
+572|New Brunswick|
+573|Yukon Territory|
+574-699|British Columbia|
+700-765|Quebec|

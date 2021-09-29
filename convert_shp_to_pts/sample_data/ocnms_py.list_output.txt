@@ -1,0 +1,10 @@
+File length: 32592
+Version: 1000
+Content type: 5
+
+File Bounding Rect: -125.681664,47.129166    -124.183899,48.505890
+
+List of all records after header
+number(from 1) length(in bytes) type_code bounding_rect(wlon nlat elon slat) num_parts total_num_points
+
+1 32484 5 -125.681664 47.129166 -124.183899 48.505890 2 2027

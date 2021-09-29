@@ -1,0 +1,14 @@
+CODE|NAME
+CA01|Alberta
+CA11|Saskatchewan
+CA03|Manitoba
+CA05|Newfoundland & Labrador
+CA09|Prince Edward Island
+CA07|Nova Scotia
+CA06|Northwest Territories
+CA13|Nunavut
+CA08|Ontario
+CA04|New Brunswick
+CA12|Yukon Territory
+CA02|British Columbia
+CA10|Quebec
