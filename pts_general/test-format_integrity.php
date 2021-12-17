@@ -10,10 +10,10 @@
   if($argc==1)
   {
     print "\n\nUsage:\n";
-    print "  test_format_integrity.php input_file\n\n";
+    print "  test-format_integrity.php input_file\n\n";
 
     print "Examples:\n";
-    print "  ./test_format_integrity.php sample_data/sample1.pts \n\n";
+    print "  ./test-format_integrity.php sample_data/sample1.pts \n\n";
 
     print "  Input a pts format file to test.  Checks for basic format conformity.  Reports a variety of errors\n";
     print "  along with some basic stats.  The type of errors found can limit the level of processeing that occurs.\n";
